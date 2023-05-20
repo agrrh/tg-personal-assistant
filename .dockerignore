@@ -1,0 +1,11 @@
+.git/
+
+**/*.secret.yml
+**/*.secret.yaml
+
+*.env
+!example.env
+
+*.md
+
+Taskfile.yaml
