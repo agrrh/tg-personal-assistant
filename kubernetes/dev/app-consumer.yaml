@@ -1,0 +1,28 @@
+---
+
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: tg-personal-assistant-dev-consumer
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/agrrh/tg-consumer
+    targetRevision: master
+    path: helm/
+    helm:
+      parameters:
+        - name: app.name
+          value: personal-assistant
+        - name: app.nats.addr
+          value: nats.bus-dev:4222
+        - name: app.nats.prefix
+          value: felix.tg.inbox
+  destination:
+    namespace: tg-personal-assistant-dev
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
