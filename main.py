@@ -29,11 +29,10 @@ async def main() -> None:
 
     logging.warning(f"getting updates for subject: {nats_subj_in}")
 
-    while True:
-        await js.subscribe(nats_subj_in, "workers", cb=handler.echo)
-        time.sleep(1)
+    await js.subscribe(nats_subj_in, "workers", cb=handler.echo)
 
-    logging.warning("moving past subscribe")
+    while True:
+        await asyncio.sleep(1)
 
 
 if __name__ == "__main__":
