@@ -1,0 +1,2 @@
+nats-py==2.1.4
+aiohttp==3.8.3
