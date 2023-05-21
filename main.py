@@ -4,11 +4,20 @@ import nats
 import os
 
 from lib.handler import Handler
+from lib.manager import Manager
+from lib.airtabledb import AirtableDB
 
 app_name = os.environ.get("APP_NAME", "personal-assistant")
 
 nats_address = os.environ.get("NATS_ADDR", "nats://nats.nats.svc:4222")
 nats_prefix = os.environ.get("NATS_PREFIX", "dummy")
+
+at_db = os.environ.get("AIRTABLE_DB")
+at_tables = os.environ.get("AIRTABLE_TABLES", "foo:ID,bar:ID")
+at_tables = {
+    table.split(":")[0]: table.split(":")[1] for table in at_tables.split(",")
+}  # "foo:ID,bar:ID" -> {foo: ID, bar: ID}
+at_token = os.environ.get("AIRTABLE_TOKEN")
 
 nats_subj_in = f"{nats_prefix}.tg.in"
 nats_subj_out = f"{nats_prefix}.tg.out"
@@ -20,11 +29,13 @@ async def main() -> None:
 
     js = nc.jetstream()
 
-    handler = Handler(jetstream=js, nats_subj_response=nats_subj_out)
+    airtable = AirtableDB(db=at_db, tables=at_tables, token=at_token)
+    handler = Handler(airtable=airtable)
+    router = Manager(jetstream=js, handler=handler, nats_subj_prefix=nats_subj_out)
 
     logging.warning(f"getting updates for subject: {nats_subj_in}.>")
 
-    await js.subscribe(f"{nats_subj_in}.>", "worker", cb=handler.echo)
+    await js.subscribe(f"{nats_subj_in}.>", "worker", cb=router.do)
 
     while True:
         await asyncio.sleep(1)
