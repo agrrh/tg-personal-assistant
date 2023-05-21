@@ -24,7 +24,7 @@ async def main() -> None:
 
     logging.warning(f"getting updates for subject: {nats_subj_in}.>")
 
-    await js.subscribe(f"{nats_subj_in}.>", "workers", cb=handler.echo)
+    await js.subscribe(f"{nats_subj_in}.>", "worker", cb=handler.echo)
 
     while True:
         await asyncio.sleep(1)
