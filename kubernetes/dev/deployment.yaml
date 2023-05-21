@@ -1,0 +1,50 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: handler
+  namespace: tg-personal-assistant-dev
+  labels:
+    app: handler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: handler
+  template:
+    metadata:
+      labels:
+        app: handler
+    spec:
+      containers:
+        - name: main
+          image: agrrh/tg-personal-assistant:0.1.0
+          env:
+            - name: APP_NAME
+              value: felix-handler
+            - name: APP_TG_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tg-token
+                  key: token
+            - name: APP_NATS_ADDR
+              value: nats.bus-dev:4222
+            - name: APP_NATS_PREFIX
+              value: felix
+
+            - name: AIRTABLE_DB
+              valueFrom:
+                secretKeyRef:
+                  name: airtable
+                  key: db
+            - name: AIRTABLE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: airtable
+                  key: token
+            - name: AIRTABLE_TABLES
+              valueFrom:
+                secretKeyRef:
+                  name: airtable
+                  key: tables
