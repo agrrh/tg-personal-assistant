@@ -21,6 +21,9 @@ spec:
         - name: main
           image: agrrh/tg-personal-assistant:0.1.0
           env:
+            - name: TZ
+              value: Europe/Moscow
+
             - name: APP_NAME
               value: felix-handler
             - name: APP_TG_TOKEN
