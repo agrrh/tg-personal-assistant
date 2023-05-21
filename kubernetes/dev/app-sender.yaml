@@ -1,28 +1,28 @@
----
-
-kind: Application
-apiVersion: argoproj.io/v1alpha1
-metadata:
-  name: tg-personal-assistant-dev-sender
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/agrrh/tg-sender
-    targetRevision: master
-    path: helm/
-    helm:
-      parameters:
-        - name: app.name
-          value: felix-tg-sender
-        - name: app.nats.addr
-          value: nats.bus-dev:4222
-        - name: app.nats.prefix
-          value: felix
-  destination:
-    namespace: tg-personal-assistant-dev
-    server: https://kubernetes.default.svc
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
+# ---
+#
+# kind: Application
+# apiVersion: argoproj.io/v1alpha1
+# metadata:
+#   name: tg-personal-assistant-dev-sender
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://github.com/agrrh/tg-sender
+#     targetRevision: master
+#     path: helm/
+#     helm:
+#       parameters:
+#         - name: app.name
+#           value: felix-tg-sender
+#         - name: app.nats.addr
+#           value: nats.bus-dev:4222
+#         - name: app.nats.prefix
+#           value: felix
+#   destination:
+#     namespace: tg-personal-assistant-dev
+#     server: https://kubernetes.default.svc
+#   syncPolicy:
+#     automated:
+#       selfHeal: true
+#       prune: true
