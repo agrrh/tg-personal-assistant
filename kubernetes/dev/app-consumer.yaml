@@ -18,7 +18,7 @@ spec:
         - name: app.nats.addr
           value: nats.bus-dev:4222
         - name: app.nats.prefix
-          value: felix.tg.inbox
+          value: felix
   destination:
     namespace: tg-personal-assistant-dev
     server: https://kubernetes.default.svc
