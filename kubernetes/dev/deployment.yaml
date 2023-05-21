@@ -28,9 +28,9 @@ spec:
                 secretKeyRef:
                   name: tg-token
                   key: token
-            - name: APP_NATS_ADDR
+            - name: NATS_ADDR
               value: nats.bus-dev:4222
-            - name: APP_NATS_PREFIX
+            - name: NATS_PREFIX
               value: felix
 
             - name: AIRTABLE_DB
