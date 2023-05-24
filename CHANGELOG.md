@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.1](https://github.com/agrrh/tg-personal-assistant/tree/0.1.1) (2023-05-24)
+
+[Full Changelog](https://github.com/agrrh/tg-personal-assistant/compare/0.1.0...0.1.1)
+
 ## [0.1.0](https://github.com/agrrh/tg-personal-assistant/tree/0.1.0) (2023-05-21)
 
 [Full Changelog](https://github.com/agrrh/tg-personal-assistant/compare/68598f7a8b1f68be713401a440fad1cb379594d2...0.1.0)
