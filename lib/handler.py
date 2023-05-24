@@ -2,6 +2,7 @@ import json
 import logging
 
 from lib.rating import Rating
+from lib.remind import Remind
 
 
 class Handler:
@@ -29,6 +30,66 @@ class Handler:
         logging.debug(f"response: {resp_msg}")
 
         return resp_msg
+
+    async def remind(self, req: object) -> None:
+        logging.debug(f"request: {req}")
+
+        # ---
+
+        text = req.get("text")
+
+        text = " ".join(text.split(" ")[1:]).strip()
+
+        chat_id = req.get("chat").get("id")
+        reply_to = req.get("message_id")
+
+        text_resp = "Done! 😼"
+
+        if Remind.validate_time(text):
+            await self.airtable.upsert_by_fields(
+                "users",
+                {
+                    "tg_id": chat_id,
+                    "remind_time": text,
+                },
+                fields=["tg_id"],
+            )
+        elif Remind.validate_tz(text):
+            await self.airtable.upsert_by_fields(
+                "users",
+                {
+                    "tg_id": chat_id,
+                    "remind_tz": text,
+                },
+                fields=["tg_id"],
+            )
+        else:
+            text_resp = "\n".join(
+                (
+                    "Invalid remind notation! 🙀",
+                    "",
+                    "Sample values:",
+                    "- Time: `19:00`, `23:59`",
+                    "- Timezone: `UTC`, `Europe/Moscow`",
+                    "",
+                    "Full timezones list:" "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
+                ),
+            )
+
+        resp = {
+            "chat": chat_id,
+            "reply_to": reply_to,
+            "text": text_resp,
+        }
+
+        # ---
+
+        resp_msg = json.dumps(resp).encode()
+        logging.debug(f"response: {resp_msg}")
+
+        return resp_msg
+
+    start = remind
 
     async def memo(self, req: object) -> None:
         logging.debug(f"request: {req}")

@@ -12,6 +12,7 @@ class Manager:
         self.commands = {
             "/health": self.handler.health,
             "/memo": self.handler.memo,
+            "/remind": self.handler.remind,
         }
 
     async def do(self, message: object) -> None:
