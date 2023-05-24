@@ -13,6 +13,8 @@ class Manager:
             "/health": self.handler.health,
             "/memo": self.handler.memo,
             "/remind": self.handler.remind,
+            "/start": self.handler.start,
+            "/help": self.handler.start,
         }
 
     async def do(self, message: object) -> None:
@@ -22,10 +24,11 @@ class Manager:
         topic_id = req.get("chat").get("id")
 
         text = req.get("text")
-
         if text.startswith("/"):
+            command = text.split(" ")[0]
             try:
-                resp = await self.commands[text.split(" ")[0]](req)
+                logging.warning(f"{command}: {text}")
+                resp = await self.commands[command](req)
             except Exception as e:
                 logging.error(f"could not handle request {e}")
         else:

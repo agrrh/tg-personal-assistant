@@ -31,6 +31,42 @@ class Handler:
 
         return resp_msg
 
+    async def start(self, req: object) -> None:
+        logging.debug(f"request: {req}")
+
+        # ---
+
+        chat_id = req.get("chat").get("id")
+        reply_to = req.get("message_id")
+
+        # TODO: Place a gif or video demo!
+        text_resp = "\n".join(
+            (
+                "Hello, my name is Felix! 😼",
+                "",
+                "I'd be there for you to remember your most important deeds and to track your well-being!",
+                "",
+                "`/health` tracks your health",
+                "",
+                "`/memo` makes me memorize what was your best memory for today",
+                "- keep memos practical to make an useful review later 📈",
+                "- keep those lovely to have some nostalgic fun 😻",
+            ),
+        )
+
+        resp = {
+            "chat": chat_id,
+            "reply_to": reply_to,
+            "text": text_resp,
+        }
+
+        # ---
+
+        resp_msg = json.dumps(resp).encode()
+        logging.debug(f"response: {resp_msg}")
+
+        return resp_msg
+
     async def remind(self, req: object) -> None:
         logging.debug(f"request: {req}")
 
@@ -88,8 +124,6 @@ class Handler:
         logging.debug(f"response: {resp_msg}")
 
         return resp_msg
-
-    start = remind
 
     async def memo(self, req: object) -> None:
         logging.debug(f"request: {req}")
