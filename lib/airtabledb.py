@@ -21,19 +21,11 @@ class AirtableDB:
 
         return dt  # noqa: PIE781
 
-    async def upsert(self, table_name: str, data: dict) -> None:
+    async def upsert_by_fields(self, table_name: str, data: dict, fields: list) -> None:
         t = self.tables[table_name]
 
-        dt = await self.get_time()
-
-        date_part = {
-            "date": dt,
-        }
-
-        formula = airtable_match(date_part)
+        formula = airtable_match({k: v for k, v in data.items() if k in fields})
         r = t.first(formula=formula)
-
-        data.update(date_part)
 
         if r:
             t.update(r.get("id"), data)

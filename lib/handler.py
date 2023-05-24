@@ -41,17 +41,24 @@ class Handler:
 
         text = " ".join(text.split(" ")[1:]).strip()
 
+        date = await self.airtable.get_time()
+
+        data = {
+            "date": date,
+            "memo": text,
+        }
+
         try:
-            await self.airtable.upsert("memo", {"memo": text})
-            text = "Done! 😼"
+            await self.airtable.upsert_by_fields("memo", data, ("date",))
+            text_resp = "Done! 😼"
         except Exception as e:
             logging.error(f"could not upsert data: {e}")
-            text = "Something went wrong! 🙀"
+            text_resp = "Something went wrong! 🙀"
 
         resp = {
             "chat": chat_id,
             "reply_to": reply_to,
-            "text": text,
+            "text": text_resp,
         }
 
         # ---
@@ -73,17 +80,24 @@ class Handler:
         text = " ".join(text.split(" ")[1:]).strip()
         rating = Rating().get_from_text(text)
 
+        date = await self.airtable.get_time()
+
+        data = {
+            "date": date,
+            "rating": rating,
+        }
+
         try:
-            await self.airtable.upsert("health", {"rating": rating})
-            text = "Done! 😼"
+            await self.airtable.upsert_by_fields("health", data, ("date",))
+            text_resp = "Done! 😼"
         except Exception as e:
             logging.error(f"could not upsert data: {e}")
-            text = "Something went wrong! 🙀"
+            text_resp = "Something went wrong! 🙀"
 
         resp = {
             "chat": chat_id,
             "reply_to": reply_to,
-            "text": text,
+            "text": text_resp,
         }
 
         # ---
@@ -100,12 +114,12 @@ class Handler:
 
         chat_id = req.get("chat").get("id")
         reply_to = req.get("message_id")
-        text = "I don't understand 😿"
+        text_resp = "I don't understand 😿"
 
         resp = {
             "chat": chat_id,
             "reply_to": reply_to,
-            "text": text,
+            "text": text_resp,
         }
 
         # ---
