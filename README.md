@@ -10,6 +10,7 @@
 graph LR
   actor((actor))
   telegram
+  airtable[(airtable)]
 
   subgraph bus
     personal-assistant.tg.in
@@ -24,6 +25,7 @@ graph LR
 
     subgraph app
       handler
+      periodic
     end
   end
 
@@ -31,6 +33,11 @@ graph LR
   tg-sender -.- personal-assistant.tg.out
 
   actor -.- telegram
+
+  handler -.- airtable
+  periodic -.- airtable
+
+  periodic --> personal-assistant.tg.out
 
   telegram -->|request| tg-consumer
   personal-assistant.tg.in --> handler --> personal-assistant.tg.out
