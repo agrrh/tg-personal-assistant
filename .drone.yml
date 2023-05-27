@@ -2,7 +2,7 @@
 
 kind: pipeline
 type: kubernetes
-name: lint
+name: code-lint
 
 steps:
   - name: hadolint
@@ -14,7 +14,7 @@ steps:
 
 kind: pipeline
 type: kubernetes
-name: release
+name: changelog-update
 
 steps:
   - name: generate-changelog
@@ -52,11 +52,10 @@ trigger:
 
 kind: pipeline
 type: kubernetes
-name: publish
+name: docker-release
 
 depends_on:
   - lint
-  - release
 
 steps:
   - name: docker-hub
