@@ -10,32 +10,33 @@
 graph LR
   actor((actor))
   telegram
-  airtable[(airtable)]
 
-  subgraph bus
-    personal-assistant.tg.in
-    personal-assistant.tg.out
+  subgraph cloud
+    airtable[(airtable)]
   end
 
-  subgraph kubernetes
-    subgraph tg-components
-      tg-consumer
-      tg-sender
+  subgraph hosted
+    subgraph bus
+      personal-assistant.tg.in[(personal-assistant.tg.in)]
+      personal-assistant.tg.out[(personal-assistant.tg.out)]
     end
 
     subgraph app
+      tg-consumer
+      tg-sender
+
       handler
       periodic
     end
   end
 
-  tg-consumer -.- personal-assistant.tg.in
-  tg-sender -.- personal-assistant.tg.out
+  actor -.-> telegram
 
-  actor -.- telegram
+  tg-consumer --> personal-assistant.tg.in
+  personal-assistant.tg.out --> tg-sender
 
-  handler -.- airtable
-  periodic -.- airtable
+  handler -.-> airtable
+  periodic -.-> airtable
 
   periodic --> personal-assistant.tg.out
 
