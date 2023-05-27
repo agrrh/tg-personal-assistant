@@ -1,5 +1,7 @@
 .git/
 
+kubernetes/
+
 **/*.secret.yml
 **/*.secret.yaml
 
