@@ -55,7 +55,7 @@ type: kubernetes
 name: docker-release
 
 depends_on:
-  - lint
+  - code-lint
 
 steps:
   - name: docker-hub
