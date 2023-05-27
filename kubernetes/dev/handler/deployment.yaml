@@ -2,11 +2,17 @@
 
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: handler
   namespace: tg-personal-assistant-dev
   labels:
     app: handler
+  annotations:
+    keel.sh/policy: patch
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 15m"
+
 spec:
   replicas: 1
   selector:
