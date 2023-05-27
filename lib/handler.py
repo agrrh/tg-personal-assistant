@@ -6,8 +6,9 @@ from lib.remind import Remind
 
 
 class Handler:
-    def __init__(self, airtable: object) -> None:
+    def __init__(self, airtable: object, timespec: object) -> None:
         self.airtable = airtable
+        self.timespec = timespec
 
     async def echo(self, req: object) -> None:
         logging.debug(f"request: {req}")
@@ -76,6 +77,7 @@ class Handler:
 
         text = " ".join(text.split(" ")[1:]).strip()
 
+        login = req.get("from", {}).get("username")
         chat_id = req.get("chat").get("id")
         reply_to = req.get("message_id")
 
@@ -85,6 +87,7 @@ class Handler:
             await self.airtable.upsert_by_fields(
                 "users",
                 {
+                    "login": login,
                     "tg_id": chat_id,
                     "remind_time": text,
                 },
@@ -94,6 +97,7 @@ class Handler:
             await self.airtable.upsert_by_fields(
                 "users",
                 {
+                    "login": login,
                     "tg_id": chat_id,
                     "remind_tz": text,
                 },
@@ -136,7 +140,8 @@ class Handler:
 
         text = " ".join(text.split(" ")[1:]).strip()
 
-        date = await self.airtable.get_time()
+        dt = await self.timespec.today()
+        date = await self.timespec.to_airtable_string(dt)
 
         data = {
             "date": date,
@@ -175,7 +180,8 @@ class Handler:
         text = " ".join(text.split(" ")[1:]).strip()
         rating = Rating().get_from_text(text)
 
-        date = await self.airtable.get_time()
+        dt = await self.timespec.today()
+        date = await self.timespec.to_airtable_string(dt)
 
         data = {
             "date": date,

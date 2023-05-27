@@ -3,9 +3,11 @@ import logging
 import nats
 import os
 
-from lib.handler import Handler
+from lib.timespec import Timespec
 from lib.manager import Manager
 from lib.airtabledb import AirtableDB
+
+tz_name = os.environ.get("TZ", "UTC")
 
 app_name = os.environ.get("APP_NAME", "personal-assistant")
 
@@ -29,13 +31,14 @@ async def main() -> None:
 
     js = nc.jetstream()
 
+    timespec = Timespec(tz_name=tz_name)
+
     airtable = AirtableDB(db=at_db, tables=at_tables, token=at_token)
-    handler = Handler(airtable=airtable)
-    router = Manager(jetstream=js, handler=handler, nats_subj_prefix=nats_subj_out)
+    manager = Manager(jetstream=js, airtable=airtable, nats_subj_prefix=nats_subj_out, timespec=timespec)
 
     logging.warning(f"getting updates for subject: {nats_subj_in}.>")
 
-    await js.subscribe(f"{nats_subj_in}.>", "worker", cb=router.do)
+    await js.subscribe(f"{nats_subj_in}.>", "worker", cb=manager.do)
 
     while True:
         await asyncio.sleep(1)
