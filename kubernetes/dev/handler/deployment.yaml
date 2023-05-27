@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: agrrh/tg-personal-assistant:0.1.1
+          image: agrrh/tg-personal-assistant:0.1.2
           env:
             - name: TZ
               value: Europe/Moscow

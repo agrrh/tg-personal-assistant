@@ -1,0 +1,53 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cron
+  namespace: tg-personal-assistant-dev
+  labels:
+    app: cron
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cron
+  template:
+    metadata:
+      labels:
+        app: cron
+    spec:
+      containers:
+        - name: main
+          image: agrrh/tg-personal-assistant:0.1.2
+          env:
+            - name: TZ
+              value: Europe/Moscow
+
+            - name: APP_NAME
+              value: felix-handler
+            - name: APP_TG_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tg-token
+                  key: token
+            - name: NATS_ADDR
+              value: nats.bus-dev:4222
+            - name: NATS_PREFIX
+              value: felix
+
+            - name: AIRTABLE_DB
+              valueFrom:
+                secretKeyRef:
+                  name: airtable
+                  key: db
+            - name: AIRTABLE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: airtable
+                  key: token
+            - name: AIRTABLE_TABLES
+              valueFrom:
+                secretKeyRef:
+                  name: airtable
+                  key: tables
