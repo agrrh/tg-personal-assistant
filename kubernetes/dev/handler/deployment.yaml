@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: main
-          # image: agrrh/tg-personal-assistant:0.1.0
+          image: agrrh/tg-personal-assistant:0.1.0  # managed by keel
           env:
             - name: TZ
               value: Europe/Moscow
