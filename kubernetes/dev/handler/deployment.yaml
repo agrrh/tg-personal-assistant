@@ -9,9 +9,9 @@ metadata:
   labels:
     app: handler
   annotations:
-    keel.sh/policy: patch
+    keel.sh/policy: all
     keel.sh/trigger: poll
-    keel.sh/pollSchedule: "@every 15m"
+    keel.sh/pollSchedule: "@every 1m"
 
 spec:
   replicas: 1
@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: main
-          image: agrrh/tg-personal-assistant:0.1.0
+          # image: agrrh/tg-personal-assistant:0.1.0
           env:
             - name: TZ
               value: Europe/Moscow
